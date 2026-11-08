@@ -25,5 +25,19 @@ for ds in bronze silver gold ops; do
   bq --location="$REGION" mk --dataset "${PROJECT_ID}:${ds}" || true
 done
 
-
 gcloud artifacts repositories create ingestion --repository-format=docker --location="$REGION" || true
+
+gcloud iam service-accounts create "$SA_INGEST" --display-name="Ingestion Cloud Run Jobs" || true
+gcloud iam service-accounts create "$SA_DATAFORM" --display-name="Dataform executions" || true
+
+SA_INGEST_EMAIL="${SA_INGEST}@${PROJECT_ID}.iam.gserviceaccount.com"
+SA_DATAFORM_EMAIL="${SA_DATAFORM}@${PROJECT_ID}.iam.gserviceaccount.com"
+
+gcloud storage buckets add-iam-policy-binding "gs://${RAW_BUCKET}" --member="serviceAccount:${SA_INGEST_EMAIL}" --role="roles/storage.objectAdmin"
+gcloud projects add-iam-policy-binding "$PROJECT_ID" --member="serviceAccount:${SA_INGEST_EMAIL}" --role="roles/secretmanager.secretAccessor"
+gcloud projects add-iam-policy-binding "$PROJECT_ID" --member="serviceAccount:${SA_DATAFORM_EMAIL}" --role="roles/bigquery.dataEditor"
+gcloud projects add-iam-policy-binding "$PROJECT_ID" --member="serviceAccount:${SA_DATAFORM_EMAIL}" --role="roles/bigquery.jobUser"
+gcloud storage buckets add-iam-policy-binding "gs://${RAW_BUCKET}" --member="serviceAccount:${SA_DATAFORM_EMAIL}" --role="roles/storage.objectViewer"
+
+echo -n "Your_Key" | gcloud secrets create FRED_API_KEY --data-file=- || true
+echo "Bootstrap done. Share the GSheet with ${SA_INGEST_EMAIL} (viewer)."
