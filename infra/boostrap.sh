@@ -1,5 +1,7 @@
+#!/bin/zsh
+
 #!/usr/bin/env bash
-set -euo pipeline
+set -euo pipefail
 
 export PROJECT_ID="quant-regimes-dev"
 export REGION="northamerica-northeast1"
@@ -8,7 +10,7 @@ export ART_BUCKET="${PROJECT_ID}-artifacts"
 export SA_INGEST="sa-ingestion"
 export SA_DATAFORM="sa-dataform"
 
-gcloud projects create "$PROJECT_ID" --name="Quant Regimes" || true
+gcloud projects create "$PROJECT_ID" --name="Quant Regimes" --organization="bouhsen-m-org"  || true
 gcloud config set project "$PROJECT_ID"
 
 gcloud services enable \
