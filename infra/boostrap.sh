@@ -1,16 +1,15 @@
 #!/bin/zsh
 
-#!/usr/bin/env bash
 set -euo pipefail
 
-export PROJECT_ID="quant-regimes-dev"
+export PROJECT_ID="quant-regimes-devp"
 export REGION="northamerica-northeast1"
 export RAW_BUCKET="${PROJECT_ID}-lake-raw"
 export ART_BUCKET="${PROJECT_ID}-artifacts"
 export SA_INGEST="sa-ingestion"
 export SA_DATAFORM="sa-dataform"
 
-gcloud projects create "$PROJECT_ID" --name="Quant Regimes" --organization="bouhsen-m-org"  || true
+#gcloud projects create "$PROJECT_ID" --name="$PROJECT_ID" --organization=522730975972  || true
 gcloud config set project "$PROJECT_ID"
 
 gcloud services enable \
