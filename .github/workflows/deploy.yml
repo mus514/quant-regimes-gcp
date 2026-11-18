@@ -1,2 +1,11 @@
-build test:
-    script: echo "Hello"
+name: CI Pipeline
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello"
