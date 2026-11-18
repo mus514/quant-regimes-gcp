@@ -6,6 +6,6 @@ on:
 
 jobs:
   build:
-    runs-on: google/cloud-sdk:slim
+    runs-on: ubuntu-latest
     steps:
       - run: echo "Hello"
