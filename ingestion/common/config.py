@@ -11,8 +11,6 @@ def _env(name: str, default: str | None = None) -> str:
     return value
 
 
-
-
 @dataclass
 class Settings:
     project_id: str = field(default_factory=lambda: _env("GCP_PROJECT"))
